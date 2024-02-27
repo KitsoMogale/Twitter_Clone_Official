@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="body2">
+            <img class="logo" src="./assets/twimage.png"/>
+            <span class="menu" id="hnav">
+             
+            <a class="nav1" href="index.html"><img class="homeimg" src="./assets/Home-icon.svg.png"/> Home</a></span>
+            <span class="menu"><img class="homeimg0" src="./assets/notifi.png"/>Notifications</span>
+            <span class="menu" id="mnav">
+             <a class="nav1" href="messages.html"> <img class="homeimg1" src="./assets/mess.png"/>Messages</a></span>
+            <span class="menu" id="pnav">
+              <a class="nav1" href="profile.html"><img class="homeimg2" src="./assets/pro.png"/> Profile</a></span>
+             <span class="menu"><a class="nav1" href="signout.html">Signout</a></span>
+           </div>
+        
+       
+    
+        <div class="content">
+
+           <div class="div012" id="div01">
+
+
+           </div>
+    
+            
+    
+                
+                
+    
+        </div>
+    
+            
+    
+            
+    
+    
+          
+    
+    
+     </div>
+
+    <script type="module">
+        
+    
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfigs = {
+    apiKey: "AIzaSyDjz3Dx_48S7OyQPsujujScjh9TttN4xzE",
+    authDomain: "twitterclone-6bd9a.firebaseapp.com",
+    databaseURL: "https://twitterclone-6bd9a-default-rtdb.firebaseio.com",
+    projectId: "twitterclone-6bd9a",
+    storageBucket: "twitterclone-6bd9a.appspot.com",
+    messagingSenderId: "768752312452",
+    appId: "1:768752312452:web:6e6c576ed8498f28aaa2d1"
+  };
+
+  // Initialize Firebase
+  const sapp = initializeApp(firebaseConfigs);
+
+  import {set,remove,getDatabase,ref,onValue,update,push} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const name = sessionStorage.getItem('name');
+    const atname ='@' + sessionStorage.getItem('atname');
+
+    if(name && atname){
+  
+  const db = getDatabase(sapp);
+  const dbref = ref(db,'users/');
+  const dbrefm = ref(db,'messages/');
+
+  const div01 = document.getElementById('div01');
+
+  function messages(){
+    onValue(dbref,function(snapshot){
+        let object = Object.entries(snapshot);
+
+        if(snapshot.exists()){
+
+            for(let i = 0;i < object.length;i++){
+
+                
+
+                let div = document.createElement('div');
+
+                let pname = document.createElement('p');
+
+                let show = document.createElement('a');
+
+                div.classList.add('divmessages');
+                show.innerText = 'show';
+                show.addEventListener('click',function(){
+                    sessionStorage.setItem('who',`${name}`+`${object[i][1].Username}` + `${object[i][1].atName}`);
+
+                })
+                show.href = 'private.html';
+                pname.innerText = `${object[i][1].Userame}` + `${object[i][1].atName}`
+
+
+                div.appendChild(pname);
+                div.appendChild(show);
+
+                div01.appendChild(div);
+
+
+            }
+
+
+
+
+        }
+        else{
+            nobodyHereYet
+        }
+    })
+  }
+
+
+}
+else{
+    window.location.href = 'login.html';
+}
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>signout</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <p class="psignout">
+        Oh so u leaving just like that?<br/>
+        aight...<br/>
+        <br/>
+        remeber,u just signingout,u not deleting ur account,so I still have all ur personal details.<br/>
+        <br/>
+        Want to delete? let the money do the negotiating.<br/>
+
+
+
+        im playing ,chill.....
+    </p>
+
+    <button id="btnout" class="btn0">signout</button>
+</body>
+<script type="module">
+
+    let btn = document.getElementById('btnout');
+
+    btn.addEventListener('click',function(){
+        sessionStorage.removeItem('name');
+    sessionStorage.removeItem('atname');
+    window.location.href = 'login.html';
+    })
+    
+
+</script>
+
+</html>

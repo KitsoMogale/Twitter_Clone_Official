@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>replies</title>
+    <link rel="stylesheet" href="replies.css">
+</head>
+<body>
+    <!-- navbar container -->
+   
+     
+    <div class="container">
+
+        <div class="body2">
+            <img class="logo" src="./assets/twimage.png"/>
+            <span class="menu" id="hnav">
+             
+            <a class="nav1" href="index.html"><img class="homeimg" src="./assets/Home-icon.svg.png"/> Home</a></span>
+            <span class="menu"><img class="homeimg0" src="./assets/notifi.png"/>Notifications</span>
+            <span class="menu" id="mnav">
+             <a class="nav1" href="messages.html"> <img class="homeimg1" src="./assets/mess.png"/>Messages</a></span>
+            <span class="menu" id="pnav">
+              <a class="nav1" href="profile.html"><img class="homeimg2" src="./assets/pro.png"/> Profile</a></span>
+             <span class="menu"><a class="nav1" href="signout.html">Signout</a></span>
+           </div>
+
+    <div class="content">
+
+        <div class="for_you">
+            <p class="p0">For You</p>
+            <p class="p1">Following</p>
+          </div>
+    
+        <div class="rebody">
+
+            <div class="type">
+    
+            <div class="profile">
+                <div class="pic">
+    
+                </div>
+    
+                <p class="proName">
+                  <span id="sp1" class="s1" > </span>
+                
+
+                
+                  <span id="sp2" class="s12" >  </span> 
+                </p>
+                
+    
+            </div>
+
+            <p id="ptweetr" class="trep">
+                
+
+            </p>
+    
+    
+            <div class="icons1">
+                
+                <span id="comments" class="s2">   </span>
+                <span id="likes" class="s2">    </span>
+                
+            </div>
+
+        </div>
+
+        <div class="b1">
+
+            <div id="b22" class="b2">
+               <textarea id="speech" class="freeSpeech">
+
+               </textarea>
+               <button class="btnreply" id="btn-reply">post</button>
+
+                
+            </div>
+
+            <div id="b33" class="b3">
+                
+
+            </div>
+    
+        </div>
+                
+    
+        </div>
+    </div>
+    
+     </div>
+
+    
+
+
+     <script type="module">
+         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import {set,remove,getDatabase,ref,onValue,update,push,get} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        let name = sessionStorage.getItem('name');
+        let atname = sessionStorage.getItem('atname');
+
+        if(name && atname){
+   
+        // Import the functions you need from the SDKs you need
+        
+       
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          /*apiKey: "AIzaSyDjz3Dx_48S7OyQPsujujScjh9TttN4xzE",
+          authDomain: "twitterclone-6bd9a.firebaseapp.com",*/
+          databaseURL: "https://twitterclone-6bd9a-default-rtdb.firebaseio.com",
+         /* projectId: "twitterclone-6bd9a",
+          storageBucket: "twitterclone-6bd9a.appspot.com",
+          messagingSenderId: "768752312452",
+          appId: "1:768752312452:web:6e6c576ed8498f28aaa2d1"*/
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+    
+        const db = getDatabase(app);
+        const dbref2 = ref(db,'replies/');
+
+        const spuname1 = document.getElementById("sp1");
+        const spuname2 = document.getElementById("sp2");
+        const prtweet = document.getElementById("ptweetr");
+        const comments = document.getElementById("comments");
+        const likes = document.getElementById("likes");
+        const b2 = document.getElementById("b22");
+        const b3 = document.getElementById('b33');
+        const btn_reply = document.getElementById('btn-reply');
+        const response = document.getElementById('speech');
+        const speech = document.getElementById('speech');
+
+       /* alert("sorry for the constant need to type ur username,yall know im a junior nton nton,so u shld understand.Besides yall aint even paying me to do this....");
+        let name = prompt("enter username pls:");
+        let atname = prompt("enter ur @ name pls:"); */
+
+        let dbref3 = ref(db,'replies/'+ name +'/');
+        let dbref5 = ref(db,'areplies/');
+        let dbref10 = ref(db,'tweets/');
+
+        let numforme;
+        let nameoftweet;
+        let tweetforsh;
+        let numofcomments;
+
+       /* if(!(typeof localStorage.getItem('nc')=== 'string')){
+        localStorage.setItem('nc',0);
+         */
+        
+        fetch();
+       // remove(dbref3);
+
+        function fetch(){
+
+           
+            
+
+            onValue(dbref3,function(snapshot){
+                if(snapshot.exists()){
+                    let object = Object.entries(snapshot.val());
+                    
+                 /*   if (object.length > 0) {
+            // Access the last item in the array
+            let lastItem = object[object.length - 1][1];
+
+            // Now you can access properties of the last item
+            spuname1.innerHTML = `${lastItem.Username}`;
+            spuname2.innerHTML = `${lastItem.atName}` ;
+            prtweet.innerHTML = `${lastItem.Tweet}` ;
+            comments.innerHTML = `${lastItem.Comments }`+ "comments";
+            likes.innerHTML =`${ lastItem.Likes }`+ "likes";
+        } else {
+            // Handle the case where there are no items in the database
+            console.log("No items found in the database.");
+        }*/
+                    let imgt = document.createElement('img');
+                    imgt.classList.add('imgt');
+
+                    spuname1.innerHTML = `${object[object.length - 1][1].Username}`;
+                    spuname2.innerHTML = `${object[object.length - 1][1].atName}` ;
+                    prtweet.innerHTML = `${object[object.length - 1][1].Tweet}` ;
+                    if(object[object.length - 1][1].Meme != "" && object[object.length - 1][1].Meme != " " )
+                    {
+                        imgt.src = object[object.length - 1][1].Meme;
+                        prtweet.appendChild(imgt);
+                    }
+                    else{
+                        imgt.src = " ";
+                    }
+                    comments.innerHTML = `${object[object.length - 1][1].Comments }`+ "comments";
+                    likes.innerHTML =`${ object[object.length - 1][1].Likes }`+ "likes";
+
+                    numofcomments = object[object.length - 1][1].Comments;
+                    
+
+                  /*  let textreply = document.createElement('textarea');
+                    let divpic = document.createElement('div');
+                    let div = document.createElement('div');
+                    div.appendChild(divpic);
+                    div.appendChild(textreply);
+                    b2.appendChild(div);*/
+                    
+                    numforme = object[object.length - 1][1].Num;
+                    nameoftweet = object[object.length - 1][1].Username;
+
+                    replieslist();
+                   
+
+
+
+                }
+                else{
+                    console.log("none here");
+                    
+                }
+
+            
+            })
+         /*   push(dbref3,{
+                adjust:"name"
+            })*/
+         /*  let dbref31 = ref(db,'replies/'+ name +'/1/' )
+
+           remove(dbref31);*/
+        }
+
+        function replieslist(){
+
+          //  let yes = 0;
+
+           
+                onValue(dbref5,function(snapshot){
+                   // if(yes==0){
+                        b3.innerHTML = "";
+
+                if(snapshot.exists()){
+                    let object2 = Object.entries(snapshot.val());
+
+                    for(let i = 0;i < object2.length;i++ ){
+
+                        console.log("cool");
+
+                        if(object2[i][1].Num == numforme){
+
+                            if( object2[i][1].trto == nameoftweet ){
+
+                            console.log("cool");
+
+                        /*    let treply = document.createElement('p');
+                            treply.innerText = object2[i][1].Tweet;
+                            let name10 = document.createElement('p');
+                            name10.innerText =`${ object2[i][1].Username}`;
+                            let name11 = document.createElement('p');
+                            name11.innerText =`${ object2[i][1].atName}`;
+
+
+                    let divpic1 = document.createElement('div');
+                    let div1 = document.createElement('div');
+                    div1.appendChild(divpic1);
+                    div1.appendChild(name10);
+                    div1.appendChild(name11);
+                    div1.appendChild(treply); 
+                    b3.appendChild(div1);*/
+
+                    
+                    let treply = document.createElement('p');
+                            treply.innerText = object2[i][1].Tweet;
+                            let name10 = document.createElement('p');
+                            name10.innerText =`${ object2[i][1].Username}`;
+                            let name11 = document.createElement('p');
+                            name11.innerText ='@'+`${ object2[i][1].atName}`;
+                            let divname = document.createElement('div');
+                            divname.classList.add('divname2');
+                            
+
+
+                    let divpic1 = document.createElement('div');
+                    divpic1.classList.add('divpic1');
+                    let div1 = document.createElement('div');
+                    divname.appendChild(divpic1);
+                    divname.appendChild(name10);
+                    divname.appendChild(name11);
+                    div1.appendChild(divname);
+                    div1.appendChild(treply); 
+                    b3.appendChild(div1);
+                            }
+
+                        }
+
+
+
+
+                    }
+                }
+           // }
+            })
+
+        }
+
+            
+        
+
+        btn_reply.addEventListener("click",function(){
+
+         //  yes = 1;
+
+          /* numofcomments = parseInt(localStorage.getItem('nc'));
+
+           numofcomments += 1;
+
+           onValue(ref(db,'tweets/'),function(snapshot){
+            let tweet = Object.entries(snapshot.val())
+
+            for(let i = 0;i < tweet.length;i++){
+
+                if(tweet[i][1].Username == nameoftweet && tweet[i][1].Num == numforme){
+                    update(ref(db,'tweets/' + `${tweet[i][0]}`+'/'),{
+                        Comments:numofcomments
+                    })
+                }
+            }
+
+           })*/
+
+          
+
+          update(dbref10,{})
+
+            onValue(dbref5,function(snapshot){
+                if(snapshot.exists()){
+                    b3.innerHTML = " ";
+                    let object1 = Object.entries(snapshot.val());
+
+                    for(let i = 0;i < object1.length;i++ ){
+
+                        console.log("cool");
+
+                        if(object1[i][1].Num == numforme){
+
+                            if( object1[i][1].trto == nameoftweet ){
+
+                            console.log("cool");
+
+                            let treply = document.createElement('p');
+                            treply.innerText = object1[i][1].Tweet;
+                            let name10 = document.createElement('p');
+                            name10.innerText =`${ object1[i][1].Username}`;
+                            let name11 = document.createElement('p');
+                            name11.innerText ='@'+`${ object1[i][1].atName}`;
+                            let divname = document.createElement('div');
+                            divname.classList.add('divname2');
+                            
+
+
+                    let divpic1 = document.createElement('div');
+                    divpic1.classList.add('divpic1');
+                    let div1 = document.createElement('div');
+                    divname.appendChild(divpic1);
+                    divname.appendChild(name10);
+                    divname.appendChild(name11);
+                    div1.appendChild(divname);
+                    div1.appendChild(treply); 
+                    b3.appendChild(div1);
+                            }
+
+                        }
+
+
+
+
+                    }
+                }
+                else{
+            window.location.href = 'login.html';
+        }
+            })
+
+            let tweet = response.value;
+            push(dbref5,{
+                Username:name,
+                atName:atname,
+                Tweet:tweet,
+                Num:numforme,
+                trto:nameoftweet
+
+            })
+          
+            speech.value = '';
+
+        })
+
+    
+
+
+
+     
+    }
+   
+    
+    
+  </script>
+    
+</body>
+</html>

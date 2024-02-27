@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter_Clone</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- navbar container -->
+    
+
+    <!-- structure -->
+
+<div class="container">
+
+  <div class="body2">
+    <img class="logo" src="./assets/twimage.png"/>
+    <span class="menu" id="hnav">
+     
+    <a class="nav1" href="index.html"><img class="homeimg" src="./assets/Home-icon.svg.png"/> Home</a></span>
+    <span class="menu"><img class="homeimg0" src="./assets/notifi.png"/>Notifications</span>
+    <span class="menu" id="mnav">
+     <a class="nav1" href="messages.html"> <img class="homeimg1" src="./assets/mess.png"/>Messages</a></span>
+    <span class="menu" id="pnav">
+      <a class="nav1" href="profile.html"><img class="homeimg2" src="./assets/pro.png"/> Profile</a></span>
+     <span class="menu"><a class="nav1" href="signout.html">Signout</a></span>
+   </div>
+
+
+    <div id="contentid" class="content">
+
+      <div class="for_you">
+        <p class="p0">For You</p>
+        <p class="p1">Following</p>
+      </div>
+
+    <div  class="body3">
+
+        <div class="type">
+            
+            <div class="ppp">
+            <div id="divpic" class="pic">
+              <img id="img2" class="img2" atl="pic" src="  ">
+    
+            </div>
+    
+            <p class="proName">
+              <span id="sname0" class="s1 s12" >  </span> <span id="sname1"  class="s12">  </span>
+            </p>
+            
+            </div>
+    
+            <textarea id="textA" class="freeSpeech" placeholder="type tweet here">
+                
+            </textarea>
+            <img class="imgpost" id="imgpost1" src=" "/>
+            <p id="proggress" class="progress1">
+
+            </p>
+            <div class="btn">
+            <button id="btn0" class="btn0">post</button>
+            <button id="btn1" class="btn1">file</button>
+            <button id="btn2" class="btn1">upload</button>
+          </div>
+        </div>
+        
+      
+        
+        <div id="b3" class="b3">
+            
+        </div>
+        
+
+     
+         
+    </div>
+    
+  </div>
+
+
+  </div>
+
+  <script type="module">
+    // firebase storage
+
+    
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfigs = {
+    apiKey: "AIzaSyDjz3Dx_48S7OyQPsujujScjh9TttN4xzE",
+    authDomain: "twitterclone-6bd9a.firebaseapp.com",
+    databaseURL: "https://twitterclone-6bd9a-default-rtdb.firebaseio.com",
+    projectId: "twitterclone-6bd9a",
+    storageBucket: "twitterclone-6bd9a.appspot.com",
+    messagingSenderId: "768752312452",
+    appId: "1:768752312452:web:6e6c576ed8498f28aaa2d1"
+  };
+
+  // Initialize Firebase
+  const sapp = initializeApp(firebaseConfigs);
+
+  import {getStorage,ref as sref ,uploadBytesResumable,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+  import {set,remove,getDatabase,ref,onValue,update,push} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const name = sessionStorage.getItem('name');
+    const atname ='@' + sessionStorage.getItem('atname');
+
+    if(name && atname){
+
+   let files = [];
+   let reader = new FileReader;
+
+
+   const imgpost = document.getElementById('imgpost1');
+   const  btnfile = document.getElementById('btn1');
+   const btnfile2 = document.getElementById('btn2');
+   const pprog = document.getElementById('proggress');
+
+   const inputfile = document.createElement('input');
+   inputfile.type = 'file';
+   inputfile.onchange = (e) => {
+    files = e.target.files;
+    let filename = files.name;
+    reader.readAsDataURL(files[0]);
+   }
+
+   reader.onload = function(){
+    imgpost.src = reader.result;
+   }
+
+btnfile.onclick = function(){
+  inputfile.click();
+  
+}
+
+let url = "";
+
+async function uploadprocess(){
+  pprog.innerHTML = 'loading....pls wait nyana'
+
+  let imgname = files[0].name;
+
+  let imgtoupload = files[0];
+
+  const metadata = {
+    contentType:imgtoupload.type
+  }
+
+  let storage = getStorage();
+  
+  let storageref = sref(storage,'images/'+imgname+'/');
+
+  let uploadTask = uploadBytesResumable(storageref,imgtoupload,metadata);
+  
+  await uploadTask;
+  console.log('done')
+  pprog.innerHTML = 'done';
+
+  url = await getDownloadURL(storageref);
+  console.log('done1')
+  console.log(url);
+
+  /*uploadTask.on('state-changed',()=> getDownloadURL(uploadTask.snapshot.ref).then((downloadURL)=>{
+  console.log(downloadURL)
+  url = downloadURL;
+  console.log(url);
+  }
+  )
+  )*/
+  
+
+}
+
+
+btnfile2.onclick = uploadprocess;
+
+
+
+
+    // Import the functions you need from the SDKs you need
+    
+    
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    //const firebaseConfig = {
+      /*apiKey: "AIzaSyDjz3Dx_48S7OyQPsujujScjh9TttN4xzE",
+      authDomain: "twitterclone-6bd9a.firebaseapp.com",*/
+    //  databaseURL: "https://twitterclone-6bd9a-default-rtdb.firebaseio.com",
+     /* projectId: "twitterclone-6bd9a",
+      storageBucket: "twitterclone-6bd9a.appspot.com",
+      messagingSenderId: "768752312452",
+      appId: "1:768752312452:web:6e6c576ed8498f28aaa2d1"*/
+   // };
+  
+    // Initialize Firebase
+   // const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(sapp);
+    const dbref = ref(db,'tweets/');
+    const dbref2 = ref(db,'replies/');
+    
+
+    const sname = document.getElementById("sname0");
+    const sname1 = document.getElementById("sname1");
+    const uname2 = document.getElementById("uname2");
+    const uname3 = document.getElementById("uname3");
+    const textA = document.getElementById("textA");
+    const divpic = document.getElementById("divpic") ;
+    const btn0el = document.getElementById("btn0");
+    const content = document.getElementById("contentid");
+    const img2 = document.getElementById('img2');
+    const b3 = document.getElementById("b3");
+    
+    
+
+   
+
+
+    let textarea = 'none';
+    let num = 0;
+    let propic = 'none';
+    let likes = 0;
+    let clicked = false; 
+    let adjust1 = 0;
+    let nameoftweettbcon;
+
+    let dbref3 = ref(db,'replies/' + name +'/');
+
+    
+
+    sname.innerHTML = name;
+    sname1.innerHTML = atname;
+    img2.src = localStorage.getItem('propic');
+
+
+   
+     tweets();
+   function repliesp(tname,atname,textarea,who,num,likes=0,meme,comments=0,clicked='none',propic='none')
+   {
+
+
+      push(dbref3,{
+          Username:tname,
+           Tweet:textarea,
+           Meme:meme,
+           Propic:propic,
+           atName:atname,
+           Likes:likes,
+           Num:num,
+           Comments:comments,
+           Who:who
+           
+         })
+
+        }
+    
+    function tweets(){
+        onValue(dbref,function(snapshot){
+            
+            if(snapshot.exists()){
+            let data = Object.entries(snapshot.val());
+            
+            
+            if(data.length == 50){
+                setTimeout(()=>{
+                   
+                    remove(dbref,data[0]);
+                },5000)
+                
+                
+            };
+            
+             b3.innerHTML = " ";
+            
+            
+            for(let i = 0;i< data.length;i++){
+                let ptweetf = data[i][1].Tweet;
+                let fname = data[i][1].Username;
+                let afname = data[i][1].atName;
+                let likesnumb = data[i][1].Likes;
+                let num2 = data[i][1].Num;
+                let coment = data[i][1].Comments;
+                let meme1 =  data[i][1].Meme;
+                let propic = data[i][1].Propic;
+               /* let likesname = data[i][1].Likes[1];
+                let likesid = data[i][1].Likes[2];*/
+
+               
+                
+                let prodiv = document.createElement("div");
+                let imgpro = document.createElement('img');
+                let div10 = document.createElement('div');
+                div10.classList.add('div110');
+                imgpro.classList.add('img2');
+                imgpro.src = propic;
+                prodiv.classList.add("prodiv1")
+    let ppic = document.createElement("div");
+    ppic.classList.add('pic');
+    ppic.appendChild(imgpro);
+    let tname = document.createElement("p"); 
+    let tspname0 = document.createElement("span");
+         tspname0.classList.add("s1");
+    let tspname1 = document.createElement("span");
+    let ptweet = document.createElement("p");
+    ptweet.classList.add('ptweet');
+    let imgtweet = document.createElement('img');
+    imgtweet.classList.add('imgpost');
+    
+
+    let divicons = document.createElement("div");
+    divicons.classList.add("icons1");
+
+
+    let a = document.createElement("p");
+   // a.setAttribute('href','replies.html');
+    a.id = `${data[i][1].Num}`;
+    a.classList.add("atag");
+    a.textContent =  "show replies....";
+    
+
+
+    let sp1 = document.createElement("span");
+    sp1.appendChild(a);
+    let sp2 = document.createElement("span");
+    sp2.textContent = "comments";
+    
+    let sp3 = document.createElement("span");
+    sp3.classList.add('sp3style');
+    let svgl = `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="16.000000pt" height="16.000000pt" viewBox="0 0 225.000000 225.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,225.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M520 2045 c-171 -42 -322 -161 -399 -314 -50 -97 -65 -165 -65 -281
+0 -90 5 -117 30 -190 17 -47 47 -110 67 -140 20 -30 238 -256 484 -502 440
+-439 449 -448 488 -448 39 0 48 9 488 448 246 246 464 472 484 502 20 30 50
+93 67 140 25 73 30 100 30 190 0 158 -42 277 -142 397 -214 256 -620 284 -869
+59 l-58 -53 -58 52 c-68 62 -175 118 -267 139 -79 19 -205 19 -280 1z m204
+-175 c99 -16 175 -59 274 -154 80 -77 93 -86 127 -86 33 0 47 9 128 87 62 58
+111 95 153 115 175 82 359 46 492 -96 84 -91 106 -149 107 -286 0 -98 -2 -109
+-33 -175 -31 -65 -64 -100 -440 -478 l-407 -408 -411 413 c-482 485 -469 467
+-469 648 1 137 23 195 107 286 67 71 152 120 234 133 69 12 72 12 138 1z"/>
+</g>
+</svg>`
+    let btnlike = document.createElement("button");
+     btnlike.id = `${data[i][1].Num}`;
+     btnlike.innerHTML =svgl ;
+     btnlike.style.border = 'none';
+     btnlike.style.background = 'none';
+     btnlike.style.padding = '0';
+    let plike = document.createElement("p");
+    plike.innerHTML = likesnumb + "likes";
+    sp3.appendChild(plike);
+    sp3.appendChild(btnlike);
+
+                      
+                   /*   `<button id="${data[i][1].num}" class="btn-like">likes</button>
+                      <p class="plikes"> ${likesnumb} + "likes"</p>`;      */
+                      
+    let sp4 = document.createElement("span");
+    sp4.textContent = "views";
+    divicons.appendChild(sp1);
+    divicons.appendChild(sp2);
+    divicons.appendChild(sp3);
+    divicons.appendChild(sp4);
+    
+    console.log(url);
+        ptweet.textContent = ptweetf ;
+        if(data[i][1].Meme != "" && data[i][1].Meme != " " ){
+          console.log('true');
+    imgtweet.src = `${data[i][1].Meme}`;
+    ptweet.appendChild(imgtweet);
+    }
+    else{
+      imgtweet.src = '';
+    }
+
+        
+        tspname0.textContent = fname;
+        tspname1.textContent = afname;
+        
+       tname.appendChild(tspname0);
+       tname.appendChild(tspname1);
+       div10.appendChild(ppic);
+       div10.appendChild(tname);
+       prodiv.appendChild(div10);
+       prodiv.appendChild(ptweet);
+       prodiv.appendChild(divicons);
+        
+        b3.appendChild(prodiv);
+
+       /* let btnl = document.getElementById(`${data[i][1].Num}`); */
+
+        let newVl ;
+
+        /*let ashre = document.getElementById(`${data[i][1].Num}`);
+        ashre.addEventListener("click",*/
+
+   a.onclick = function(){
+   console.log("reply");
+      //let srname1 = prompt("enter ur username:");
+
+
+
+          repliesp(fname,afname,ptweetf,name,num2,likesnumb, meme1);
+        
+        setTimeout(()=>{
+          window.location.href = 'replies.html';
+
+        },50);
+
+    }
+
+    if(localStorage.getItem(`${data[i][0]}`) && localStorage.getItem(`${data[i][0]}`) === 'true' ){
+          console.log('true') ;
+    }
+    else{
+      localStorage.setItem(`${data[i][0]}`,false) ;
+
+    }
+
+      btnlike.onclick = function tool(){
+        btnlike.querySelector('path').setAttribute('fill', 'red'); 
+        console.log("good1");
+        if(localStorage.getItem(`${data[i][0]}`)=== 'false'){
+       let dblike = ref(db,'tweets/'+`${data[i][0]}` + '/');
+         let dblike2 = ref(db,'tweets/'+`${data[i][0]}` + '/');
+         
+         onValue(dblike,function(snapshot){
+          
+             let valueL = snapshot.val() ;
+             let currentl = valueL.Likes;
+             newVl = currentl + 1;
+             localStorage.setItem(`${data[i][0]}`,true);
+         })
+         console.log("good2");
+         
+         update(dblike,{
+             Likes:newVl
+         })
+         
+         console.log("good3");
+        }
+
+    }
+       
+        
+        
+            }
+            }
+            else{
+            console.log("niggas")
+        }
+        })
+       // adjust1 += 1;
+     //  update(dbref,{Trigger:adjust1});
+        
+        
+    }
+    
+     
+     
+     
+    /* let numtc = 0;
+     let numoflikes = 0;*/
+     if(!(typeof localStorage.getItem('numtc1')=== 'string')){
+     localStorage.setItem('numtc1',0);
+     }
+    
+
+    btn0el.addEventListener("click",function(){
+  
+    
+        textarea = textA.value;
+        textA.value = " ";
+        imgpost.src = " ";
+        
+     
+        
+        b3.innerHTML = " ";
+        let thenewnum =parseInt(localStorage.getItem('numtc1'));
+        
+       //  let likes = numoflikes;
+        push1(name,textarea,atname,thenewnum,url,localStorage.getItem('propic'));
+        url= " ";
+
+        thenewnum += 1;
+         localStorage.setItem('numtc1',thenewnum);
+       // numtc++;
+
+
+    });
+    
+    
+    
+    function push1(name,textarea,atname,num,url='',propic='none',comments=0,likes=0){
+        
+         push(dbref,{
+           Username:name,
+           Tweet:textarea,
+           Meme:url,
+           Propic:propic,
+           atName:atname,
+           Likes:likes,
+           Comments:comments,
+           Num:num,
+           Trigger:0
+
+        } )
+    }
+
+   /* function updatememe(meme){
+      update(dbref,{
+        Meme:meme
+      })
+    }*/
+  }
+
+  else{
+
+    window.location.href = 'login.html';
+  }
+
+  
+  </script>
+       
+</body>
+
+</html>

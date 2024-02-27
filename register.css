@@ -1,0 +1,22 @@
+.form{
+    margin:10px;
+    
+}
+
+.btnregister{
+    border:2px solid blue;
+    background-color: lightblue;
+    font-weight: bold;
+}
+
+.btnsignin{
+    border:2px solid blue;
+    background-color: lightblue;
+    font-weight: bold;
+}
+
+.me{
+    width:30%;
+    height:50vh;
+    margin:10px;
+}

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>messages</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+   <div class="mesgdiv">
+    <textarea class="mesg" id="msg">
+
+    </textarea>
+    <button id="send" class="btn0">
+        send
+    </button>
+
+</div>
+
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfigs = {
+    apiKey: "AIzaSyDjz3Dx_48S7OyQPsujujScjh9TttN4xzE",
+    authDomain: "twitterclone-6bd9a.firebaseapp.com",
+    databaseURL: "https://twitterclone-6bd9a-default-rtdb.firebaseio.com",
+    projectId: "twitterclone-6bd9a",
+    storageBucket: "twitterclone-6bd9a.appspot.com",
+    messagingSenderId: "768752312452",
+    appId: "1:768752312452:web:6e6c576ed8498f28aaa2d1"
+  };
+
+  // Initialize Firebase
+  const sapp = initializeApp(firebaseConfigs);
+
+  import {set,remove,getDatabase,ref,onValue,update,push,get} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  
+  const db = getDatabase(sapp);
+  const dbref = ref(db,'users/');
+  const dbrefm = ref(db,'messages/' +`${name}`+ `${sessionStorage.getItem('who')}` + '/');
+  const dbrefm2 = ref(db,'messages/' + `${sessionStorage.getItem('who')}``${name}` + '/');
+ // const dbrefpm = ref(db,'private/');
+
+ const message = document.getElementById('msg');
+ const send = document.getElementById('send');
+ const maindiv = document.getElementById('mesgdiv');
+ const body = document.getElementById('body');
+
+ let m1 = [];
+ let m2 = [];
+
+ messages();
+ messages2();
+ display();
+
+
+function messages(){
+    onValue(dbrefm,function(snapshot){
+
+        let object = Object.entries(snapshot.val());
+
+        if(snapshot.exists()){
+
+            for(let i = 0;i < object.length;i++){
+
+                m1.push({msg:object[i][1].Message,time:object[i][1].Time});
+
+            }
+        }
+
+    })
+}
+
+
+function messages2(){
+
+    onValue(dbrefm2,function(snapshot){
+
+let object = Object.entries(snapshot.val());
+
+if(snapshot.exists()){
+
+    for(let i = 0;i < object.length;i++){
+
+        m2.push({msg:object[i][1].Message,time:object[i][1].Time});
+
+    }
+
+}
+
+})
+
+
+}
+
+function display(){
+
+    let length;
+    if(m1.length > m2.length){
+
+        length = m1.length ;
+    }
+    else{
+        length = m2.length ;
+    }
+
+    for(let i = 0;i < length;i++ ){
+
+        if(typeof m1[i].time === 'undefined'){
+            if(typeof m2[i].time === 'undefined'){
+                console.log('done');
+            }
+            else{
+                let p2 = document.createElement('p');
+            p2.innerText = m2[i].Message ;
+            let div0112 = document.createElement('div');
+            div0112.classList.add('div0112');
+            div0112.appendChild(p2);
+            body.appendChild(div0112);
+
+
+            }
+        }
+        else{
+
+            if(typeof m2[i].time === 'undefined'){
+
+                if(m1[i].time < m2[i].time){
+
+let p1 = document.createElement('p');
+p1.innerText = m1[i].Message ;
+let div0111 = document.createElement('div');
+div0111.classList.add('div0111');
+div0111.appendChild(p1);
+body.appendChild(div0111);
+                
+            }
+            else{
+
+                if(m1[i].time < m2[i].time){
+
+let p1 = document.createElement('p');
+p1.innerText = m1[i].Message ;
+let div0111 = document.createElement('div');
+div0111.classList.add('div0111');
+div0111.appendChild(p1);
+body.appendChild(div0111);
+
+}
+else{
+let p2 = document.createElement('p');
+p2.innerText = m2[i].Message ;
+let div0112 = document.createElement('div');
+div0112.classList.add('div0112');
+div0112.appendChild(p2);
+body.appendChild(div0112);
+
+}
+               
+
+            }
+
+
+    }
+
+    }
+
+}
+
+}
+
+
+
+send.addEventListener('click',function(){
+    let time = Date.now();
+    let send1 = message.value;
+
+    push(dbrefm,{
+        Message:send1,
+        Time:time
+
+    })
+})
+
+
+ /* function messages(){
+    onValue(dbrefpm,function(snapshot){
+        let object = Object.entries(snapshot);
+
+        if(snapshot.exists()){
+
+            for(let i = 0;i < object.length;i++){
+
+                let div = document.createElement('div');
+
+                let pname = document.createElement('p');
+
+                let show = document.createElement('a');
+
+                div.classList.add('divmessages');
+                show.innerText = 'show';
+                show.href = 'private.html';
+                pname.innerText = `${object[i][1].name}` + `${object[i][1].atname}`
+
+
+                div.appendChild(pname);
+                div.appendChild(show);
+
+
+            }
+
+
+
+
+        }
+        else{
+            nobodyHereYet
+        }
+    })
+  }*/
+
+
+
+
+
+    </script>
+</body>
+</html>

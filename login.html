@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="register.css" rel="stylesheet"/>
+</head>
+<body>
+
+    <h2>Login To Account</h2>
+
+    <form id="Mainform">
+
+        <div class="form">
+            <input type="email" class="formc" id="emailinp" placeholder="name@gmail.com">
+            <label for="emailinp">Email</label>
+        </div>
+
+
+        <div class="form">
+            <input type="password" class="formc" id="passwordinp" placeholder="password">
+            <label for="passwordinp">Password</label>
+        </div>
+
+
+
+        <p>Let's cook</p>
+        <button type="submit" class="btnsignin" >login</button>
+        <p>Dont have an account?skawara!! register here</p>
+        <a href="register.html"><button type="button" class="btnsignin" >register</button></a>
+
+
+
+    </form>
+
+    <img class="me" src="./assets/IMG_20231105_171140.jpg" >
+    
+</body>
+
+<script type="module">
+
+ // Import the functions you need from the SDKs you need
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfigs = {
+    apiKey: "AIzaSyDjz3Dx_48S7OyQPsujujScjh9TttN4xzE",
+    authDomain: "twitterclone-6bd9a.firebaseapp.com",
+    databaseURL: "https://twitterclone-6bd9a-default-rtdb.firebaseio.com",
+    projectId: "twitterclone-6bd9a",
+    storageBucket: "twitterclone-6bd9a.appspot.com",
+    messagingSenderId: "768752312452",
+    appId: "1:768752312452:web:6e6c576ed8498f28aaa2d1"
+  };
+
+  // Initialize Firebase
+  const sapp = initializeApp(firebaseConfigs);
+  import {getAuth,signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import {getDatabase,get,ref} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+
+
+  const db = getDatabase(sapp);
+  const auth = getAuth(sapp);
+  const dbref = ref(db);
+
+
+  const emailinp = document.getElementById('emailinp');
+  const password = document.getElementById('passwordinp');
+  const mainform = document.getElementById('Mainform');
+
+  let signinUser = evt => {
+    evt.preventDefault();
+
+    signInWithEmailAndPassword(auth,emailinp.value,password.value,).then((credentials)=>{
+
+        get(ref(db,'users/' + `${credentials.user.uid}` +'/')).then((snapshot)=> {
+            if(snapshot.exists()){
+
+                sessionStorage.setItem('name',`${snapshot.val().Username}`);
+                sessionStorage.setItem('atname',`${snapshot.val().atName}`);
+
+                window.location.href = 'index.html';
+
+            }
+        })
+        console.log(credentials);
+        
+    })
+  }
+
+  mainform.addEventListener('submit',signinUser);
+
+
+</script>
+</html>
